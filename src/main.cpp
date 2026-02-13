@@ -23,7 +23,17 @@ void ERCMain()
     servo.SetMin(500); // set minimum value for servo
     servo.SetMax(2272); // set maximum value for servo
 
-    
+    //Part 1
+    /*
+    while(!LCD.Touch(&x_position, &y_position))
+    {
+        CdSvalue = CdS_cell.Value();
+        LCD.WriteLine(CdSvalue);
+        Sleep(.2);
+        LCD.Clear();
+    }
+    */
+    //Part 2
     while(!LCD.Touch(&x_position, &y_position))
     {
         CdSvalue = CdS_cell.Value();
