@@ -17,7 +17,7 @@ static const float THRESH_R = 2.5;
 
 // Polarity: if "line" reads LOWER voltage than background, keep true.
 // If "line" reads HIGHER voltage, set false.
-static const bool LINE_IS_LOW = true;
+static const bool LINE_IS_LOW = false;
 
 // Debounce to reduce jitter in state changes
 static const int STABLE_COUNT = 3;
