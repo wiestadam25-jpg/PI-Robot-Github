@@ -22,6 +22,7 @@ void Stop();
 void Motor_25();
 void Motor40();
 void Motor60();
+void Course();
 
 void Drive_Forward(){
     rightdrive.SetPercent(25.);
@@ -35,18 +36,18 @@ void Drive_Back(){
     return;
 }
 
-void Turn_Right(){
+void Turn_Left(){
     rightdrive.SetPercent(-15.);
     leftdrive.SetPercent(15.);
-    Sleep(3.0);
+    Sleep(2.0);
     Stop();
     return;
 }
 
-void Turn_Left(){
+void Turn_Right(){
     rightdrive.SetPercent(15.);
     leftdrive.SetPercent(-15.);
-    Sleep(3.0);
+    Sleep(2.0);
     Stop();
     return;
 }
@@ -58,14 +59,14 @@ void Stop(){
 }
 
 void Motor25(){
+    //Reseting encoder counts
+    left_encoder.ResetCounts();
+    right_encoder.ResetCounts();
+
     //Sets motors to 25% power
     leftdrive.SetPercent(25.0);
     rightdrive.SetPercent(25.0);
 
-    //Reseting encoder counts
-    left_encoder.ResetCounts();
-    right_encoder.ResetCounts();
-
     //Wait until encoder reaches 243 counts
     while(left_encoder.Counts() < 243 || right_encoder.Counts() < 243);
 
@@ -76,17 +77,19 @@ void Motor25(){
     //Print Actual Encoder Values
     LCD.WriteLine(left_encoder.Counts());
     LCD.WriteLine(right_encoder.Counts());
+
+    return;
 }
 
 void Motor40(){
+    //Reseting encoder counts
+    left_encoder.ResetCounts();
+    right_encoder.ResetCounts();
+
     //Sets motors to 25% power
     leftdrive.SetPercent(40.0);
     rightdrive.SetPercent(40.0);
 
-    //Reseting encoder counts
-    left_encoder.ResetCounts();
-    right_encoder.ResetCounts();
-
     //Wait until encoder reaches 243 counts
     while(left_encoder.Counts() < 243 || right_encoder.Counts() < 243);
 
@@ -97,17 +100,19 @@ void Motor40(){
     //Print Actual Encoder Values
     LCD.WriteLine(left_encoder.Counts());
     LCD.WriteLine(right_encoder.Counts());
+
+    return;
 }
 
 void Motor60(){
+    //Reseting encoder counts
+    left_encoder.ResetCounts();
+    right_encoder.ResetCounts();
+
     //Sets motors to 25% power
     leftdrive.SetPercent(60.0);
     rightdrive.SetPercent(60.0);
 
-    //Reseting encoder counts
-    left_encoder.ResetCounts();
-    right_encoder.ResetCounts();
-
     //Wait until encoder reaches 243 counts
     while(left_encoder.Counts() < 243 || right_encoder.Counts() < 243);
 
@@ -118,15 +123,69 @@ void Motor60(){
     //Print Actual Encoder Values
     LCD.WriteLine(left_encoder.Counts());
     LCD.WriteLine(right_encoder.Counts());
+
+    return;
+}
+
+void Course(){
+//567
+    //Reseting encoder counts
+    left_encoder.ResetCounts();
+    right_encoder.ResetCounts();
+
+    //Sets motors to 25% power
+    leftdrive.SetPercent(25.0);
+    rightdrive.SetPercent(25.0);
+
+    //Wait until encoder reaches 567 counts
+    while(left_encoder.Counts() < 567);
+
+    Stop();
+
+    Sleep(1.0);
+
+    Turn_Left();
+
+    Sleep(1.0);
+
+    //Reseting encoder counts
+    left_encoder.ResetCounts();
+    right_encoder.ResetCounts();
+
+    //Sets motors to 25% power
+    leftdrive.SetPercent(25.0);
+    rightdrive.SetPercent(25.0);
+
+    //Wait until encoder reaches 405 counts
+    while(left_encoder.Counts() < 405);
+
+    Stop();
+
+    Sleep(1.0);
+
+    Turn_Right();
+
+    Sleep(1.0);
+
+    //Reseting encoder counts
+    left_encoder.ResetCounts();
+    right_encoder.ResetCounts();
+
+    //Sets motors to 25% power
+    leftdrive.SetPercent(25.0);
+    rightdrive.SetPercent(25.0);
+
+    //Wait until encoder reaches 162 counts
+    while(left_encoder.Counts() < 162);
+
+    Stop();
+
+    return;
 }
 
 void ERCMain()
 {
     int x, y;
-    while(!LCD.Touch(&x, &y));
-    Motor25();
-    while(!LCD.Touch(&x, &y));
-    Motor40();
-    while(!LCD.Touch(&x, &y));
-    Motor60();
+    while(!LCD.Touch(&x, &y));  
+    Course();
 }
