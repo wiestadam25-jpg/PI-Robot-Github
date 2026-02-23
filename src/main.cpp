@@ -49,56 +49,16 @@ void Stop(){
     return;
 }
 
-
-
-/* void ERCMain()
-{
-    // Your code here!
-    DigitalInputPin fr_switch(FEHIO::Pin6);
-    DigitalInputPin fl_switch(FEHIO::Pin7);
-    DigitalInputPin br_switch(FEHIO::Pin8);
-    DigitalInputPin bl_switch(FEHIO::Pin9);
-    
-    int x,y;
-    while(!LCD.Touch(&x,&y)){
-
-    }
-
-    Drive_Forward();
-    while(fr_switch.Value() == 1 && fl_switch.Value() == 1){
-
-    }
-
-    Stop();
-    Drive_Back();
-    Sleep(1.0);
-    Stop();
-    Turn_Left();
-    Drive_Forward();
-    while(fr_switch.Value() == 1 && fl_switch.Value() == 1){
-
-    }
-
-    Stop();
-    Drive_Back();
-    Sleep(1.0);
-    Stop();
-    Turn_Right();
-
-    Drive_Forward();
-    while(fr_switch.Value() == 1 && fl_switch.Value() == 1){
-
-    }
-    Stop(); */
-
     #include <FEHLCD.h>
     #include <FEHIO.h>
     #include <FEHSD.h>
 
-    // Declarations for analog optosensors
-    AnalogInputPin right_opto(FEHIO::Pin2);
-    AnalogInputPin middle_opto(FEHIO::Pin3);
-    AnalogInputPin left_opto(FEHIO::Pin4);
+    enum LineStates {
+        MIDDLE,
+        RIGHT,
+        LEFT
+    };
+
 
     void ERCMain()
     {
@@ -108,6 +68,12 @@ void Stop(){
         DigitalInputPin fl_switch(FEHIO::Pin7);
         DigitalInputPin br_switch(FEHIO::Pin8);
         DigitalInputPin bl_switch(FEHIO::Pin9);
+
+        // Declarations for analog optosensors
+        AnalogInputPin right_opto(FEHIO::Pin0);
+        AnalogInputPin middle_opto(FEHIO::Pin1);
+        AnalogInputPin left_opto(FEHIO::Pin2);
+
     
 
         //Initialize the screen
@@ -129,54 +95,56 @@ void Stop(){
         while(LCD.Touch(&x,&y)); //Wait for screen to be unpressed
         // Write the value returned by the optosensor to the screen
 
-        AnalogInputPin right_opto(FEHIO::Pin0);
-        AnalogInputPin middle_opto(FEHIO::Pin1);
-        AnalogInputPin left_opto(FEHIO::Pin2);
-
-                    float rightOptosensorValue = right_opto.Value();
-        float middleOptosensorValue = middle_opto.Value();
-        float leftOptosensorValue = left_opto.Value();
-
-       /* LCD.Write("Left Optosensor Value:");
-        LCD.WriteLine(leftOptosensorValue);
-        LCD.Write("Right Optosensor Value:");
-        LCD.WriteLine(rightOptosensorValue);
-        LCD.Write("Middle Optosensor Value:");
-        LCD.WriteLine(middleOptosensorValue);
-        Sleep(0.25); */
-       
+        int state = MIDDLE;
 
 
-         Drive_Forward();
 
-     while(1) {
-        float rightOptosensorValue = right_opto.Value();
-        float middleOptosensorValue = middle_opto.Value();
-        float leftOptosensorValue = left_opto.Value();
-        if (leftOptosensorValue > 2) {
-            while (leftOptosensorValue > 2) {
-                        float rightOptosensorValue = right_opto.Value();
-        float middleOptosensorValue = middle_opto.Value();
-        float leftOptosensorValue = left_opto.Value();
-                leftdrive.SetPercent(0.);
+        while(1) {
+            float rightOptosensorValue = right_opto.Value();
+            float middleOptosensorValue = middle_opto.Value();
+            float leftOptosensorValue = left_opto.Value();
+
+            switch(state) {
+                case MIDDLE:
+                    Drive_Forward();
+
+                    if(rightOptosensorValue > 3.2) {
+                        state = RIGHT;
+                    }
+                    else if (leftOptosensorValue > 2) {
+                        state = LEFT;
+                    }
+                    break;
+
+                case RIGHT:
+                    leftdrive.SetPercent(25.);
+                    rightdrive.SetPercent(10.);
+
+                    if(rightOptosensorValue < 3.2) {
+                        state = MIDDLE;
+                    }
+                    break;
+
+                case LEFT:
+                    leftdrive.SetPercent(10.);
+                    rightdrive.SetPercent(25.);
+
+                    if(leftOptosensorValue < 2) {
+                        state = MIDDLE;
+                    }
+                    break;
+
+                /* default:
+                    leftdrive.Stop();
+                    rightdrive.Stop();
+                    break; */
             }
-            leftdrive.SetPercent(25.);
-        }
-        if (rightOptosensorValue > 3.2) {
-            while(rightOptosensorValue > 3.2) {
-                        float rightOptosensorValue = right_opto.Value();
-        float middleOptosensorValue = middle_opto.Value();
-        float leftOptosensorValue = left_opto.Value();
-                rightdrive.SetPercent(0.);
-            }
-            rightdrive.SetPercent(25.);
-        }
-        else{
-            //NoChange
-        }
+
+            Sleep(0.05);
+
+
+        } 
     }
-    } 
-
     
         
 
