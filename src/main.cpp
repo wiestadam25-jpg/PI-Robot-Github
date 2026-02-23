@@ -16,7 +16,7 @@ void Turn_Left();
 void Stop();
 
 void Drive_Forward(){
-    rightdrive.SetPercent(25.);
+    rightdrive.SetPercent(-25.);
     leftdrive.SetPercent(25.);
     return;
 }
@@ -96,6 +96,25 @@ void Stop(){
         // Write the value returned by the optosensor to the screen
 
         int state = MIDDLE;
+        /* while(1) {
+            Drive_Forward();
+        } */
+
+        /* while(1) {
+            float rightOptosensorValue = right_opto.Value();
+            float middleOptosensorValue = middle_opto.Value();
+            float leftOptosensorValue = left_opto.Value();
+
+            LCD.Write("Left Optosensor Value:");
+            LCD.WriteLine(leftOptosensorValue);
+            LCD.Write("Middle Optosensor Value:");
+            LCD.WriteLine(middleOptosensorValue);
+            LCD.Write("Right Optosensor Value:");
+            LCD.WriteLine(rightOptosensorValue);
+
+            Sleep(0.5);
+
+        } */
 
 
 
@@ -108,29 +127,33 @@ void Stop(){
                 case MIDDLE:
                     Drive_Forward();
 
-                    if(rightOptosensorValue > 3.2) {
+                    if(rightOptosensorValue > 2.4) {
                         state = RIGHT;
+                        LCD.WriteLine(state);
                     }
-                    else if (leftOptosensorValue > 2) {
+                    else if (leftOptosensorValue > 2.4) {
                         state = LEFT;
+                        LCD.WriteLine(state);
                     }
                     break;
 
                 case RIGHT:
                     leftdrive.SetPercent(25.);
-                    rightdrive.SetPercent(10.);
+                    rightdrive.SetPercent(-10.);
 
-                    if(rightOptosensorValue < 3.2) {
+                    if(rightOptosensorValue < 2.5) {
                         state = MIDDLE;
+                        LCD.WriteLine(state);
                     }
                     break;
 
                 case LEFT:
                     leftdrive.SetPercent(10.);
-                    rightdrive.SetPercent(25.);
+                    rightdrive.SetPercent(-25.);
 
-                    if(leftOptosensorValue < 2) {
+                    if(leftOptosensorValue < 2.5) {
                         state = MIDDLE;
+                        LCD.WriteLine(state);
                     }
                     break;
 
@@ -138,13 +161,13 @@ void Stop(){
                     leftdrive.Stop();
                     rightdrive.Stop();
                     break; */
-            }
+             } 
 
-            Sleep(0.05);
+            Sleep(0.03);
 
 
         } 
-    }
+     } 
     
         
 
