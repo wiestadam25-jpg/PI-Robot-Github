@@ -51,7 +51,7 @@ void Stop(){
 
 
 
-void ERCMain()
+/* void ERCMain()
 {
     // Your code here!
     DigitalInputPin fr_switch(FEHIO::Pin6);
@@ -89,5 +89,111 @@ void ERCMain()
     while(fr_switch.Value() == 1 && fl_switch.Value() == 1){
 
     }
-    Stop();
-}
+    Stop(); */
+
+    #include <FEHLCD.h>
+    #include <FEHIO.h>
+    #include <FEHSD.h>
+
+    // Declarations for analog optosensors
+    AnalogInputPin right_opto(FEHIO::Pin2);
+    AnalogInputPin middle_opto(FEHIO::Pin3);
+    AnalogInputPin left_opto(FEHIO::Pin4);
+
+    void ERCMain()
+    {
+        int x, y; //for touch screen
+
+        DigitalInputPin fr_switch(FEHIO::Pin6);
+        DigitalInputPin fl_switch(FEHIO::Pin7);
+        DigitalInputPin br_switch(FEHIO::Pin8);
+        DigitalInputPin bl_switch(FEHIO::Pin9);
+    
+
+        //Initialize the screen
+        LCD.Clear(BLACK);
+        LCD.SetFontColor(WHITE);
+
+        LCD.WriteLine("Analog Optosensor Testing");
+        LCD.WriteLine("Touch the screen");
+        while(!LCD.Touch(&x,&y)); //Wait for screen to be pressed
+        while(LCD.Touch(&x,&y)); //Wait for screen to be unpressed
+
+        /* Drive_Forward();
+        while(fr_switch.Value() == 1 && fl_switch.Value() == 1){ */
+
+        // Record values for optosensors on and off of the straight line
+        // Left Optosensor on straight line
+
+        while(!LCD.Touch(&x,&y)); //Wait for screen to be pressed
+        while(LCD.Touch(&x,&y)); //Wait for screen to be unpressed
+        // Write the value returned by the optosensor to the screen
+
+        AnalogInputPin right_opto(FEHIO::Pin0);
+        AnalogInputPin middle_opto(FEHIO::Pin1);
+        AnalogInputPin left_opto(FEHIO::Pin2);
+
+                    float rightOptosensorValue = right_opto.Value();
+        float middleOptosensorValue = middle_opto.Value();
+        float leftOptosensorValue = left_opto.Value();
+
+       /* LCD.Write("Left Optosensor Value:");
+        LCD.WriteLine(leftOptosensorValue);
+        LCD.Write("Right Optosensor Value:");
+        LCD.WriteLine(rightOptosensorValue);
+        LCD.Write("Middle Optosensor Value:");
+        LCD.WriteLine(middleOptosensorValue);
+        Sleep(0.25); */
+       
+
+
+         Drive_Forward();
+
+     while(1) {
+        float rightOptosensorValue = right_opto.Value();
+        float middleOptosensorValue = middle_opto.Value();
+        float leftOptosensorValue = left_opto.Value();
+        if (leftOptosensorValue > 2) {
+            while (leftOptosensorValue > 2) {
+                        float rightOptosensorValue = right_opto.Value();
+        float middleOptosensorValue = middle_opto.Value();
+        float leftOptosensorValue = left_opto.Value();
+                leftdrive.SetPercent(0.);
+            }
+            leftdrive.SetPercent(25.);
+        }
+        if (rightOptosensorValue > 3.2) {
+            while(rightOptosensorValue > 3.2) {
+                        float rightOptosensorValue = right_opto.Value();
+        float middleOptosensorValue = middle_opto.Value();
+        float leftOptosensorValue = left_opto.Value();
+                rightdrive.SetPercent(0.);
+            }
+            rightdrive.SetPercent(25.);
+        }
+        else{
+            //NoChange
+        }
+    }
+    } 
+
+    
+        
+
+        // Left Optosensor off straight line
+        /* LCD.Clear(BLACK);
+        LCD.WriteLine("Place left optosensor off straight line");
+        Sleep(0.25); // Wait to avoid double input
+        LCD.WriteLine("Touch screen to record value (2/12)");
+        while(!LCD.Touch(&x,&y)); //Wait for screen to be pressed
+        while(LCD.Touch(&x,&y)); //Wait for screen to be unpressed
+        // Write the value returned by the optosensor to the screen
+        // <ADD CODE HERE>
+
+        // Repeat process for remaining optosensors, and repeat all three for the curved line values
+        // <ADD CODE HERE>
+
+        // Print end message to screen
+        LCD.Clear(BLACK);
+        LCD.WriteLine("Test Finished"); */
+    
