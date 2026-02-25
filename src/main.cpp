@@ -1,5 +1,8 @@
 #include <FEH.h>
 #include <Arduino.h>
+#include <FEHLCD.h>
+#include <FEHIO.h>
+#include <FEHSD.h>
 
 //Pivot Constants
 #define Apple_Pickup_ANGLE 90
@@ -20,18 +23,24 @@ FEHMotor rightdrive(FEHMotor::Motor1,9.0);
 FEHMotor leftdrive(FEHMotor::Motor0,9.0);
 FEHServo arm(FEHServo::Servo0);
 
+//Pivot funtions
 void Pivot_Set_Angle(int degree);
+//Crayola Bot Drive Functions
 void Drive_Forward();
 void Drive_Back();
 void Turn_Right();
 void Turn_Left();
 void Stop();
 
+//Pivot functions
 void Pivot_Set_Angle(int degree){
     arm.SetDegree(degree);
     return;
 }
 
+//Crayola Bot Drive Functions//
+
+/*
 void Drive_Forward(){
     rightdrive.SetPercent(-25.);
     leftdrive.SetPercent(25.);
@@ -65,10 +74,7 @@ void Stop(){
     leftdrive.SetPercent(0.);
     return;
 }
-
-    #include <FEHLCD.h>
-    #include <FEHIO.h>
-    #include <FEHSD.h>
+*/
 
     enum LineStates {
         MIDDLE,
@@ -82,10 +88,14 @@ void Stop(){
     {
         int x, y; //for touch screen
 
+        // Declarations for crayola bot bump switches//
+        
+        /*
         DigitalInputPin fr_switch(FEHIO::Pin6);
         DigitalInputPin fl_switch(FEHIO::Pin7);
         DigitalInputPin br_switch(FEHIO::Pin8);
         DigitalInputPin bl_switch(FEHIO::Pin9);
+        */
 
         // Declarations for analog optosensors
         AnalogInputPin right_opto(FEHIO::Pin0);
@@ -140,7 +150,9 @@ void Stop(){
         } */
 
 
-
+        //Working State machine for line following//
+       
+        /*
         while(1) {
             float rightOptosensorValue = right_opto.Value();
             float middleOptosensorValue = middle_opto.Value();
@@ -179,17 +191,13 @@ void Stop(){
                         LCD.WriteLine(state);
                     }
                     break;
-
-                /* default:
-                    leftdrive.Stop();
-                    rightdrive.Stop();
-                    break; */
              } 
 
             Sleep(0.03);
 
-
-        } 
+             
+        } */
+       
      } 
     
         
