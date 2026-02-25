@@ -1,6 +1,15 @@
 #include <FEH.h>
 #include <Arduino.h>
 
+//Pivot Constants
+#define Apple_Pickup_ANGLE 90
+#define Apple_Dropoff_ANGLE 0
+#define Window_ANGLE 45
+#define Lever_Down_ANGLE 90
+#define Lever_Up_ANGLE 0
+#define Servo_Max_Angle 180
+#define Servo_Min_Angle 0
+
 //Hello
 // Declare things like Motors, Servos, etc. here
 // For example:
@@ -9,11 +18,19 @@
 
 FEHMotor rightdrive(FEHMotor::Motor1,9.0);
 FEHMotor leftdrive(FEHMotor::Motor0,9.0);
+FEHServo arm(FEHServo::Servo0);
+
+void Pivot_Set_Angle(int degree);
 void Drive_Forward();
 void Drive_Back();
 void Turn_Right();
 void Turn_Left();
 void Stop();
+
+void Pivot_Set_Angle(int degree){
+    arm.SetDegree(degree);
+    return;
+}
 
 void Drive_Forward(){
     rightdrive.SetPercent(25.);
@@ -54,40 +71,17 @@ void Stop(){
 void ERCMain()
 {
     // Your code here!
-    DigitalInputPin fr_switch(FEHIO::Pin6);
-    DigitalInputPin fl_switch(FEHIO::Pin7);
-    DigitalInputPin br_switch(FEHIO::Pin8);
-    DigitalInputPin bl_switch(FEHIO::Pin9);
-    
     int x,y;
+
+    //Calibrate the arm servo to get the min and max values for the servo. This only needs to be done once per servo, so you can comment this out after you get the values and set them with SetMin() and SetMax()
+    arm.TouchCalibrate();
+
+    //Set the min and max values for the servo so that it can function properly.
+    arm.SetMin(Servo_Min_Angle);
+    arm.SetMax(Servo_Max_Angle);
+
     while(!LCD.Touch(&x,&y)){
 
     }
 
-    Drive_Forward();
-    while(fr_switch.Value() == 1 && fl_switch.Value() == 1){
-
-    }
-
-    Stop();
-    Drive_Back();
-    Sleep(1.0);
-    Stop();
-    Turn_Left();
-    Drive_Forward();
-    while(fr_switch.Value() == 1 && fl_switch.Value() == 1){
-
-    }
-
-    Stop();
-    Drive_Back();
-    Sleep(1.0);
-    Stop();
-    Turn_Right();
-
-    Drive_Forward();
-    while(fr_switch.Value() == 1 && fl_switch.Value() == 1){
-
-    }
-    Stop();
 }
