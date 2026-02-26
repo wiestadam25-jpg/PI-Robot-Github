@@ -13,6 +13,9 @@
 #define Servo_Max_Angle 180
 #define Servo_Min_Angle 0
 
+//Compost Mechanism Constants
+#define Compost_Speed 25.0
+
 //Hello
 // Declare things like Motors, Servos, etc. here
 // For example:
@@ -21,10 +24,13 @@
 
 FEHMotor rightdrive(FEHMotor::Motor1,9.0);
 FEHMotor leftdrive(FEHMotor::Motor0,9.0);
+FEHMotor compost(FEHMotor::Motor2,5.0);
 FEHServo arm(FEHServo::Servo0);
 
 //Pivot funtions
 void Pivot_Set_Angle(int degree);
+//Compost mechanism functions
+void Compost_Set_Speed(float percent);
 //Crayola Bot Drive Functions
 void Drive_Forward();
 void Drive_Back();
@@ -35,6 +41,12 @@ void Stop();
 //Pivot functions
 void Pivot_Set_Angle(int degree){
     arm.SetDegree(degree);
+    return;
+}
+
+//Compost mechanism functions
+void Compost_Set_Speed(float percent){
+    compost.SetPercent(percent);
     return;
 }
 
